@@ -12,4 +12,4 @@ This app identifies the number of unique faces in a video with YOLOv11 and DBSCA
 
 ## Notes
 - The app may take a longer time to show the results.
-- You can tweak the parameters provided inside the app to enhance the result's accuracy.
+- You can tweak the parameters provided inside the app to enhance the accuracy.
