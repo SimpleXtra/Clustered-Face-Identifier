@@ -1,5 +1,5 @@
-# Cluster Image Identifier
-This app identifies the number of unique faces in a video with YOLOv11 and Facenet512. It utilizes Gradio for deployment.
+DBSCAN-# Cluster Image Identifier
+This app identifies the number of unique faces in a video with YOLOv11 and DBSCAN-clustered Facenet512. It utilizes Gradio for deployment.
 
 ## Steps to use the app
 1. Clone the repository to your local machine.
