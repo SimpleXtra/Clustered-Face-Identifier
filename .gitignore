@@ -1,0 +1,6 @@
+data/raw/*
+data/processed/*
+notebooks/runs/
+notebooks/sample/
+notebooks/*.pt
+*.cache
