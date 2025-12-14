@@ -9,7 +9,7 @@ def process_video(video_path: str):
 	print(f"Processing video: {video_path}")
 	
 	try:
-		_, faces_cls_best = detect_people.find_people(video=video_path) 
+		faces_cls_best = detect_people.find_people(video=video_path) 
 	except Exception as e:
 		return f"An error occurred during face processing: {e}", None
 	
@@ -18,7 +18,7 @@ def process_video(video_path: str):
 	for i, face_obj in enumerate(faces_cls_best):
 		face_img = face_obj.get_face() 
 		face_img_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
-		caption = f"Person {i + 1} (Confidence: {face_obj.conf:.2f})"
+		caption = f"Person {i + 1} (FaceScore: {face_obj.score:.2f})"
 		gallery_images.append((face_img_rgb, caption))
 
 	num_unique_people = len(faces_cls_best)
