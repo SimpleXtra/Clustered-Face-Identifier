@@ -4,3 +4,4 @@ notebooks/runs/
 notebooks/sample/
 notebooks/*.pt
 *.cache
+app/__pycache__/

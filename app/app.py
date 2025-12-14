@@ -1,0 +1,75 @@
+import gradio as gr
+import cv2
+
+import detect_people
+
+def process_video(video_path: str):
+	if not video_path: return "Please upload a video first", None
+
+	print(f"Processing video: {video_path}")
+	
+	try:
+		_, faces_cls_best = detect_people.find_people(video=video_path) 
+	except Exception as e:
+		return f"An error occurred during face processing: {e}", None
+	
+	gallery_images = []
+	
+	for i, face_obj in enumerate(faces_cls_best):
+		face_img = face_obj.get_face() 
+		face_img_rgb = cv2.cvtColor(face_img, cv2.COLOR_BGR2RGB)
+		caption = f"Person {i + 1} (Confidence: {face_obj.conf:.2f})"
+		gallery_images.append((face_img_rgb, caption))
+
+	num_unique_people = len(faces_cls_best)
+	if num_unique_people == 0:
+		summary = "Analysis complete. No faces were confidently identified."
+	elif num_unique_people == 1:
+		summary = "Analysis complete. 1 unique individual was identified."
+	else:
+		summary = f"Analysis complete. {num_unique_people} unique individuals were identified."
+	
+	return summary, gallery_images
+
+if __name__ == "__main__":
+	with gr.Blocks(title="Clustered Face Identifier") as demo:
+		gr.Markdown(
+			"<center><span style='font-size: 36px; font-weight: bold;'>Clustered Face Identifier</span></center>"
+		)
+
+		with gr.Row(equal_height=True) as main_row:
+			with gr.Column(scale=1):
+				pass 
+				
+			with gr.Column(scale=3):
+				video_input = gr.Video(
+					label="Upload a Video",
+					sources=["upload"]
+				)
+				
+				submit_button = gr.Button("Identify People", variant='primary')
+				
+				count_output = gr.Markdown(
+					value="Upload a video and click 'Identify People'",
+					label="Analysis Summary"
+				)
+				
+				image_output = gr.Gallery(
+					label="Best Representative Face Images (One per Unique Person)",
+					show_label=True,
+					rows=1,
+					columns=5,
+					object_fit="contain",
+					height="auto"
+				)
+
+			with gr.Column(scale=1):
+				pass
+
+		submit_button.click(
+			fn=process_video,
+			inputs=[video_input],
+			outputs=[count_output, image_output]
+		)
+
+	demo.launch()
