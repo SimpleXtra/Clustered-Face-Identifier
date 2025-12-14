@@ -13,11 +13,11 @@ The raw ZIP files from Kaggle are stored in `data/raw/`, while the combined and 
 
 The formatted dataset follows the [Ultralytics YOLO format](https://docs.ultralytics.com/datasets/detect/#ultralytics-yolo-format).
 
-Since the model only detects faces, the `dataset.yaml` definition only uses one class (`0`) to represent faces.
+Since the model only detects faces, the [dataset.yaml](./dataset.yaml) definition only uses one class (`0`) to represent faces.
 
 ### Preprocessing
 
-> All preprocessing that tinkers with the dataset structure are addressed in `notebooks/dataset_preprocessing.ipynb`.
+> All preprocessing that tinkers with the dataset structure are addressed in [dataset_preprocessing.ipynb](../notebooks/dataset_preprocessing.ipynb).
 
 One of the [datasets](https://www.kaggle.com/datasets/sudhanshu2198/face-detection-dataset) uses the `xywh` format to represent the bounding boxes, where the `xy` is the top-left corner of the face, and `wh` is the width and height of the bounding box. However, YOLO expects a normalized `xywh`, where the `xy` is the center point of the face instead. Therefore, all labels from this dataset source must be converted to a normalized `xywh` format first.
 
