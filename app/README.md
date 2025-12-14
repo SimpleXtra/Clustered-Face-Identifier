@@ -6,10 +6,10 @@ This app identifies the number of unique faces in a video with YOLOv11 and DBSCA
 2. Install all dependencies from requirements.txt.
 3. From the app directory, open app.py (app/app.py).
 4. Run app.py, then wait for a moment before an address (http://127.0.0.1:7860) appears on the console.
-5. Copy the address to a web browser.
+5. Copy the address to your web browser.
 6. In the web browser, upload a video file.
 7. Click "Identify People" to show the images and amount of unique faces in the uploaded video.
 
 ## Notes
 - The app may take a longer time to show the results.
-- You can tweak the parameters to enhance the result's accuracy.
+- You can tweak the parameters provided inside the app to enhance the result's accuracy.
