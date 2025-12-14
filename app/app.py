@@ -3,13 +3,22 @@ import cv2
 
 import detect_people
 
-def process_video(video_path: str):
+def process_video(
+		video_path: str,
+		track_conf: float = 0.6,
+		track_iou: float = 0.5,
+		qscore_conf_weight: float = 0.65,
+		qscore_box_weight: float = 0.1,
+		qscore_center_weight: float = 0.25,
+		top_k_faces: int = 3,
+		dbscan_eps: float = 0.25
+	):
 	if not video_path: return "Please upload a video first", None
 
 	print(f"Processing video: {video_path}")
 	
 	try:
-		faces_cls_best = detect_people.find_people(video=video_path) 
+		faces_cls_best = detect_people.find_people(video_path, track_conf, track_iou, qscore_conf_weight, qscore_box_weight, qscore_center_weight, top_k_faces, dbscan_eps) 
 	except Exception as e:
 		return f"An error occurred during face processing: {e}", None
 	
@@ -38,37 +47,36 @@ if __name__ == "__main__":
 		)
 
 		with gr.Row(equal_height=True) as main_row:
-			with gr.Column(scale=1):
-				pass 
-				
-			with gr.Column(scale=3):
-				video_input = gr.Video(
-					label="Upload a Video",
-					sources=["upload"]
-				)
+			with gr.Column(scale=2):
+				video_input = gr.Video(label="Upload a Video", sources=["upload"])
 				
 				submit_button = gr.Button("Identify People", variant='primary')
 				
-				count_output = gr.Markdown(
-					value="Upload a video and click 'Identify People'",
-					label="Analysis Summary"
-				)
+				count_output = gr.Markdown(value="Upload a video and click 'Identify People'",label="Analysis Summary")
 				
-				image_output = gr.Gallery(
-					label="Best Representative Face Images (One per Unique Person)",
-					show_label=True,
-					rows=1,
-					columns=5,
-					object_fit="contain",
-					height="auto"
-				)
+				image_output = gr.Gallery(label="Best Representative Face Images (One per Unique Person)", show_label=True, rows=1, columns=5, object_fit="contain", height="auto")
 
 			with gr.Column(scale=1):
-				pass
+				gr.Markdown("## Parameters")
+				gr.Markdown("### Face Detection and Tracking")
+
+				track_conf = gr.Slider(minimum=0, maximum=1, value=0.6, step=0.01, label="Confidence Threshold")
+				track_iou = gr.Slider(minimum=0, maximum=1, value=0.5, step=0.01, label="IOU Threshold")
+				
+				gr.Markdown("### Face Quality Scoring")
+
+				qscore_conf_weight = gr.Slider(minimum=0, maximum=1, value=0.65, step=0.01, label="Confidence Weight")
+				qscore_box_weight = gr.Slider(minimum=0, maximum=1, value=0.1, step=0.01, label="Box Size Weight")
+				qscore_center_weight = gr.Slider(minimum=0, maximum=1, value=0.25, step=0.01, label="Center Distance Weight")
+				
+				gr.Markdown("### Embedding & Clustering")
+
+				top_k_faces = gr.Slider(minimum=1, maximum=10, value=3, step=1, label="Top K Faces")
+				dbscan_eps = gr.Slider(minimum=0, maximum=1, value=0.25, step=0.01, label="DBSCAN Epsilon")
 
 		submit_button.click(
 			fn=process_video,
-			inputs=[video_input],
+			inputs=[video_input, track_conf, track_iou, qscore_conf_weight, qscore_box_weight, qscore_center_weight, top_k_faces, dbscan_eps],
 			outputs=[count_output, image_output]
 		)
 
