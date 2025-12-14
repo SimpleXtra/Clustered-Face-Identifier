@@ -11,5 +11,4 @@ This app identifies the number of unique faces in a video with YOLOv11 and DBSCA
 7. Click "Identify People" to show the images and amount of unique faces in the uploaded video.
 
 ## Notes
-- An internet connection is required to use the app.
 - The app may take a longer time to show the results.
